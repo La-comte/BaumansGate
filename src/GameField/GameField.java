@@ -34,7 +34,12 @@ public class GameField {
     }
     public void enterField(){
         boolean hasPersonAtCeil = true;
+        System.out.print("\t");
+        for (int k = 1; k < 16; k++)
+            System.out.print(k + "\t");
+        System.out.print("\n");
         for (int i = 0; i < 15; i++) {
+            System.out.print((i+1) + "\t");
             for (int j = 0; j < 15; j++) {
                 for (int w = 0; w < mePersons.size(); w++) {
                     if (mePersons.get(w).getX() == i && mePersons.get(w).getY() == j) {

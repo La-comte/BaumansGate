@@ -1,12 +1,16 @@
 package Person;
 
+import Building.Building;
 import Field.Field;
+
+import java.util.HashMap;
 
 public class Rider extends Person{
     public Rider(int health, int attack, int rangeAttack, int defence, double steps, int price, int x, int y, String num){
         super(health, attack, rangeAttack, defence, steps, price, x, y, num);
+        nullFine();
     }
-    @Override
+    /*@Override
     public void mechanismMotion(int x1, int y1){
         int j = getY();
         int countRose = 0;
@@ -14,16 +18,16 @@ public class Rider extends Person{
         System.out.println("Now health: " + getHealth());
         while (j < y1){
             j += 1;
-            step += getFine(Field.symbCeil(getX(), j));
-            if (Field.symbCeil(getX(), j).equals("❀")){
+            step += getFine(Field.symbCell(getX(), j));
+            if (Field.symbCell(getX(), j).equals("❀")){
                 countRose += 1;
             }
         }
         int i = getX();
         while (i < x1){
             i += 1;
-            step += getFine(Field.symbCeil(i, j));
-            if (Field.symbCeil(i, j).equals("❀")){
+            step += getFine(Field.symbCell(i, j));
+            if (Field.symbCell(i, j).equals("❀")){
                 countRose += 1;
             }
         }
@@ -35,15 +39,14 @@ public class Rider extends Person{
         } else { System.out.println("LOL no steps"); }
         System.out.println("Health: " + getHealth());
         System.out.println("Steps: " + getSteps());
-    }
+    }*/
     @Override
-    public double getFine(String symbol){
-        switch (symbol){
-            case "*", "❀" -> { return 1; }
-            case "#" -> { return 2.2; }
-            case "@" -> { return 1.2; }
-            case "!" -> { return 1.5; }
-        }
-        return 0;
+    public void nullFine(){
+        getFine().put("*", (double) 1);
+        getFine().put("!", 1.5);
+        getFine().put("#", 2.2);
+        getFine().put("@", 1.2);
+        getFine().put("❀", (double) 1);
     }
+
 }

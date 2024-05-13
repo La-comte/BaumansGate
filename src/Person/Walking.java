@@ -6,15 +6,14 @@ public class Walking extends Person{
 
     public Walking(int health, int attack, int rangeAttack, int defence, double steps, int price, int x, int y, String num){
         super(health, attack, rangeAttack, defence, steps, price, x, y, num);
+        nullFine();
     }
     @Override
-    public double getFine(String symbol){
-        switch (symbol){
-            case "*", "❀" -> { return 1; }
-            case "#" -> { return 1.5; }
-            case "@" -> { return 2; }
-            case "!" -> { return 1.2; }
-        }
-        return 0;
+    public void nullFine(){
+        getFine().put("*", (double) 1);
+        getFine().put("!", 1.2);
+        getFine().put("#", 1.5);
+        getFine().put("@", (double) 2);
+        getFine().put("❀", (double) 1);
     }
 }

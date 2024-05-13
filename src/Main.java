@@ -1,5 +1,9 @@
+import City.MyCity;
 import Field.Field;
 import GameField.GameField;
+import Player.MyPlayer;
+import Player.Bot;
+import Utils.ConsoleColors;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -7,54 +11,74 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Field field = Field.getInstance();
-        field.nullCeil();
+        field.nullCell();
         GameField gameField = new GameField();
         System.out.print("My move:\n");
-        gameField.moneyLimit(gameField.meEnterPerson());
+        gameField.enterCatalog(true);
+        MyPlayer.moneyLimit(MyPlayer.enterPerson());
+        gameField.enterField();
         System.out.println("Enemy move:");
-        gameField.moneyLimitEnemy(gameField.enemyEnterPerson());
-        while (gameField.notNull()){
+        gameField.enterCatalog(false);
+        Bot.moneyLimit(Bot.enterPerson());
+        gameField.enterField();
+        gameField.nullKeys();
+        while (gameField.notNullPerson() && gameField.notNullEnemy()){
             System.out.print("My move:\n");
             System.out.print("What you want do?:\n\t1.Buy a person\n\t2.Move a person\n\t3.Attack the enemy\n\t4.Finish the move\n");
             Scanner in = new Scanner(System.in);
             int doo = Integer.parseInt(in.nextLine());
             switch (doo){
                 case 1 -> {
-                    gameField.moneyLimit(gameField.meEnterPerson());
+                    gameField.enterCatalog(true);
+                    MyPlayer.moneyLimit(MyPlayer.enterPerson());
+                    gameField.enterField();
                 }
                 case 2 -> {
-                    gameField.motion();
+                    MyPlayer.motionPlayer();
+                    gameField.enterField();
                 }
                 case 3 -> {
-                    gameField.attack();
+                    gameField.buyMyBuilding();
+                    MyPlayer.attackPlayer();
+                    gameField.enterField();
                 }
                 case 4 -> {
+                    SaveGame file = new SaveGame();
+                    file.saveall();
                     gameField.nullingSteps(true);
                     System.out.println("Enemy move:");
                     System.out.print("What you want do?:\n\t1.Buy a person\n\t2.Move a person\n\t3.Attack the enemy\n\t4.Finish the move\n");
                     System.out.println("Answer: 2");
-                    gameField.motionEnemy();
+                    Bot.motionPlayer();
+                    gameField.enterField();
                     System.out.println("Enemy move:");
                     System.out.print("What you want do?:\n\t1.Buy a person\n\t2.Move a person\n\t3.Attack the enemy\n\t4.Finish the move\n");
                     Random r = new Random();
                     int doEnemy = r.nextInt(4) + 1;
+                    //int doEnemy = 3;
                     System.out.println("Answer: " + doEnemy);
                     switch (doEnemy) {
                         case 1 -> {
-                            gameField.moneyLimitEnemy(gameField.enemyEnterPerson());
+                            gameField.enterCatalog(false);
+                            Bot.moneyLimit(Bot.enterPerson());
+                            gameField.enterField();
                         }
                         case 2 -> {
-                            gameField.motionEnemy();
+                            Bot.motionPlayer();
+                            gameField.enterField();
                         }
                         case 3 -> {
-                            gameField.attackEnemy();
-                        }
-                        case 4 -> {
-                            gameField.nullingSteps(false);
+                            gameField.buyBotBuilding();
+                            Bot.attackPlayer();
+                            gameField.enterField();
                         }
                     }
+                    gameField.nullingSteps(false);
                 }
             }
         }
+        if (gameField.notNullPerson()){
+            System.out.println(ConsoleColors.GREEN_BOLD + "You're the winner" + ConsoleColors.RESET);
+        } else { System.out.println(ConsoleColors.PURPLE_BOLD + "The enemy has won" + ConsoleColors.RESET); }
     }
 }

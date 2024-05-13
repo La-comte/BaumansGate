@@ -1,5 +1,9 @@
 package Person;
+import Building.Building;
 import Field.Field;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class Person {
     private int health, attack, rangeAttack, defence, price, x, y;
@@ -17,11 +21,23 @@ public abstract class Person {
         this.y = y;
         this.num = num;
     }
+    private final HashMap<String, Double> fine = new HashMap<>();
+
+    public HashMap<String, Double> getFine() {
+        return fine;
+    }
+    public void setFine(double minusFine){
+        for (String key : fine.keySet()) {
+            Double newFine = fine.get(key);
+            newFine -= minusFine;
+            fine.put(key, newFine);
+        }
+    }
     public double getStartsteps(){
         return startsteps;
     }
-    public double getFine(String symbol){
-        return 0;
+    public double getOneFine(String symbol){
+        return getFine().get(symbol);
     }
     public int getHealth(){
         return health;
@@ -51,40 +67,74 @@ public abstract class Person {
     public void setSteps(double steps){
         this.steps = steps;
     }
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+    public void setRangeAttack(int rangeAttack) {
+        this.rangeAttack = rangeAttack;
+    }
+    public void setStartsteps(double startsteps) {
+        this.startsteps = startsteps;
+    }
+    public void setNum(String num) {
+        this.num = num;
+    }
     public void setX(int x) { this.x = x; }
     public void setY(int y) { this.y = y; }
+
+    public void nullFine(){
+        fine.put("*", (double) 0);
+        fine.put("!", (double) 0);
+        fine.put("#", (double) 0);
+        fine.put("@", (double) 0);
+        fine.put("❀", (double) 0);
+    }
     public void mechanismMotion(int x1, int y1){
-        int j = y;
+        int j = getY();
         int countRose = 0;
         double step = 0;
         System.out.println("Now health: " + getHealth());
         while (j < y1){
             j += 1;
-            step += getFine(Field.symbCeil(x, j));
-            if (Field.symbCeil(x, j).equals("❀")){
+            step += getOneFine(Field.symbCell(x, j));
+            if (Field.symbCell(x, j).equals("❀")){
                 countRose += 1;
             }
         }
-        int i = x;
+        while (j > y1){
+            j -= 1;
+            step += getOneFine(Field.symbCell(x, j));
+            if (Field.symbCell(x, j).equals("❀")){
+                countRose += 1;
+            }
+        }
+        int i = getX();
+        while (i > x1){
+            i -= 1;
+            step += getOneFine(Field.symbCell(i, j));
+            if (Field.symbCell(i, j).equals("❀")){
+                countRose += 1;
+            }
+        }
         while (i < x1){
             i += 1;
-            step += getFine(Field.symbCeil(i, j));
-            if (Field.symbCeil(i, j).equals("❀")){
+            step += getOneFine(Field.symbCell(i, j));
+            if (Field.symbCell(i, j).equals("❀")){
                 countRose += 1;
             }
         }
         if (step <= getSteps()){
             setSteps(getSteps() - step);
             setHealth(getHealth() - 5*countRose);
-            y = j;
-            x = i;
+            setY(j);
+            setX(i);
         } else { System.out.println("LOL no steps"); }
         System.out.println("Health: " + getHealth());
         System.out.println("Steps: " + getSteps());
     }
     public void mechanismAttack(Person attacker){
         System.out.println("Now health defender: " + health);
-        System.out.println("Now defence defender: " + defence);
+        System.out.println("Now defence: " + defence);
         int difference = Math.abs((attacker.getX() + attacker.getY()) - (x + y));
         if (difference <= attacker.getRangeAttack()){
             if (attacker.getAttack() > defence){
@@ -101,7 +151,7 @@ public abstract class Person {
                 defence = defence - attacker.getAttack();
             }
         } else { System.out.print("You can't attack:\n"); }
-        System.out.println("Health defender: " + health);
-        System.out.println("Defence defender: " + defence);
+        System.out.println("Health: " + health);
+        System.out.println("Defence: " + defence);
     }
 }

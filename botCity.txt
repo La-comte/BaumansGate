@@ -1,0 +1,11 @@
+Academy
+Arsenal
+Forge
+Workshop3
+Workshop4
+Healer
+Workshop1
+Market
+Tavern
+Workshop2
+purchased

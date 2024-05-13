@@ -1,226 +1,149 @@
 package GameField;
 
+import City.MyCity;
+import City.BotCity;
 import Field.Field;
-import Person.Person;
-import Person.Archer;
-import Person.Rider;
-import Person.Walking;
+import Player.Bot;
+import Player.MyPlayer;
+import Utils.ConsoleColors;
 
-import java.util.ArrayList;
 import java.util.Random;
-
 import java.util.Scanner;
 
 public class GameField {
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String GREEN_BOLD = "\033[1;32m";
-    public static final String PURPLE_BOLD_BRIGHT = "\033[1;95m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    private int meWallet = 999;
-    public void setMeWallet(int meWallet) {
-        this.meWallet = meWallet;
+    Bot bot = Bot.getInstance(999, 999, 999);
+    MyPlayer myPlayer = MyPlayer.getInstance(999, 999, 999);
+    MyCity myCity = MyCity.getInstance();
+    BotCity botCity = BotCity.getInstance();
+    public void nullKeys (){
+        botCity.nullKeys();
+        myCity.nullKeys();
     }
-    private int enemyWallet = 999;
-    public void setEnemyWallet(int enemyWallet){
-        this.enemyWallet = enemyWallet;
+    public void buyMyBuilding(){
+        System.out.println("Do you want to buy or upgrade a building?\n\t1.Buy\n\t2.Upgrade\n\t3.No");
+        Scanner in = new Scanner(System.in);
+        int doo = Integer.parseInt(in.nextLine());
+        switch (doo) {
+            case 1 -> myCity.buyBuilding();
+            case 2 -> myCity.upBuilding();
+        }
     }
-    ArrayList<Person> mePersons = new ArrayList<>();
-    ArrayList<Person> enemyPersons = new ArrayList<>();
-    public boolean notNull(){
-        if (mePersons.isEmpty() || enemyPersons.isEmpty())
-            return false;
-        return true;
+    public void buyBotBuilding() {
+        if (botCity.notNull()) {
+            System.out.println("Do you want to buy a building?");
+            Random r = new Random();
+            //int doo = r.nextInt(2) + 1;
+            int doo = 1;
+            if (doo == 1) {
+                System.out.println(ConsoleColors.PURPLE + "Yes" + ConsoleColors.RESET);
+                botCity.buyBuilding();
+            } else {
+                System.out.println(ConsoleColors.PURPLE + "NO" + ConsoleColors.RESET);
+            }
+        } else {
+            if (!botCity.notNullKeys()) {
+                System.out.println("Do you want to buy or upgrade a building?\n\t1.Buy\n\t2.Upgrade\n\t3.No");
+                Random r = new Random();
+                int doo = r.nextInt(3) + 1;
+                //int doo = 1;
+                switch (doo) {
+                    case 1 -> {
+                        System.out.println(ConsoleColors.PURPLE + "Buy" + ConsoleColors.RESET);
+                        botCity.buyBuilding();
+                    }
+                    case 2 -> {
+                        System.out.println(ConsoleColors.PURPLE + "Upgrade" + ConsoleColors.RESET);
+                        botCity.upBuilding();
+                    }
+                    case 3 -> System.out.println(ConsoleColors.PURPLE + "No" + ConsoleColors.RESET);
+                }
+            } else {
+                System.out.println("Do you want to upgrade a building?");
+                Random r = new Random();
+                int doo = r.nextInt(2) + 1;
+                if (doo == 1) {
+                    System.out.println(ConsoleColors.PURPLE + "Yes" + ConsoleColors.RESET);
+                    botCity.upBuilding();
+                } else {
+                    System.out.println(ConsoleColors.PURPLE + "NO" + ConsoleColors.RESET);
+                }
+            }
+        }
     }
-    public void enterField(){
-        boolean hasPersonAtCeil = true;
+
+
+    public boolean notNullPerson() {
+        return !MyPlayer.isEmptyMy();
+    }
+    public boolean notNullEnemy() {
+        return !Bot.isEmptyBot();
+    }
+
+    public void enterField() {
+        boolean hasSomethingAtCell = true;
         System.out.print("\t");
-        for (int k = 1; k < 16; k++)
+        for (int k = 1; k < 11; k++)
             System.out.print(k + "\t");
         System.out.print("\n");
-        for (int i = 0; i < 15; i++) {
-            System.out.print((i+1) + "\t");
-            for (int j = 0; j < 15; j++) {
-                for (int w = 0; w < mePersons.size(); w++) {
-                    if (mePersons.get(w).getX() == i && mePersons.get(w).getY() == j) {
-                        System.out.print(GREEN_BOLD + mePersons.get(w).getNum() + ANSI_RESET + "\t");
-                        hasPersonAtCeil = false;
+        for (int i = 0; i < 10; i++) {
+            System.out.print((i + 1) + "\t");
+            for (int j = 0; j < 10; j++) {
+                if (myCity.hasCityAtCell(i, j)) {
+                    System.out.print(ConsoleColors.GREEN + myCity.getSymbol() + ConsoleColors.RESET + "\t");
+                    hasSomethingAtCell = false;
+                }
+                if (botCity.hasCityAtCell(i, j)) {
+                    System.out.print(ConsoleColors.PURPLE + botCity.getSymbol() + ConsoleColors.RESET + "\t");
+                    hasSomethingAtCell = false;
+                }
+                for (int w = 0; w < MyPlayer.sizePlayer(); w++) {
+                    if (hasSomethingAtCell && MyPlayer.getMy(w).getX() == i && MyPlayer.getMy(w).getY() == j) {
+                        System.out.print(ConsoleColors.GREEN_BOLD + MyPlayer.getMy(w).getNum() + ConsoleColors.RESET + "\t");
+                        hasSomethingAtCell = false;
                         break;
                     }
                 }
-                for (int w = 0; w < enemyPersons.size(); w++) {
-                    if (enemyPersons.get(w).getX() == i && enemyPersons.get(w).getY() == j) {
-                        System.out.print(PURPLE_BOLD_BRIGHT + enemyPersons.get(w).getNum() + ANSI_RESET + "\t");
-                        hasPersonAtCeil = false;
+                for (int w = 0; w < Bot.sizePlayer(); w++) {
+                    if (hasSomethingAtCell && Bot.getBot(w).getX() == i && Bot.getBot(w).getY() == j) {
+                        System.out.print(ConsoleColors.PURPLE_BOLD + Bot.getBot(w).getNum() + ConsoleColors.RESET + "\t");
+                        hasSomethingAtCell = false;
                         break;
                     }
                 }
-                if (hasPersonAtCeil){ System.out.print(Field.symbCeil(i, j) + "\t"); }
-                hasPersonAtCeil = true;
+                if (hasSomethingAtCell) {
+                    System.out.print(Field.symbCell(i, j) + "\t");
+                }
+                hasSomethingAtCell = true;
             }
             System.out.println();
         }
     }
-    public Person meEnterPerson(){
-        System.out.print("Input coordinates:\n");
-        Scanner in = new Scanner(System.in);
-        int x = Integer.parseInt(in.nextLine());
-        int y = Integer.parseInt(in.nextLine());
-        System.out.print("Input Type: ");
-        int t = Integer.parseInt(in.nextLine());
-        x -= 1;
-        y -= 1;
-        return enterPerson(x, y, t);
-    }
-    public Person enemyEnterPerson(){
-        System.out.println("Input coordinates:");
-        Random r = new Random();
-        int x = r.nextInt(15);
-        int y = r.nextInt(15);
-        System.out.print((x+1) + "\n" + (y+1) + "\n");
-        System.out.println("Input Type: ");
-        //int t = r.nextInt(10) + 1;
-        int t = 10;
-        System.out.println(t);
-        return enterPerson(x, y, t);
-    }
-    private Person enterPerson(int x, int y, int t){
-        switch (t) {
-            case 1 -> {
-                return new Walking(50, 5, 1, 8, 3, 10, x, y, "1");
-            }
-            case 2 -> {
-                return new Walking(35, 3, 1, 4, 6, 15, x, y, "2");
-            }
-            case 3 -> {
-                return new Walking(45, 9, 1, 3, 4, 20, x, y, "3");
-            }
-            case 4 -> {
-                return new Archer(30, 6, 5, 8, 2, 15, x, y, "4");
-            }
-            case 5 -> {
-                return new Archer(25, 3, 3, 4, 4, 19, x, y, "5");
-            }
-            case 6 -> {
-                return new Archer(40, 7, 6, 3, 2, 23, x, y, "6");
-            }
-            case 7 -> {
-                return new Rider(30, 5, 1, 3, 6, 20, x, y, "7");
-            }
-            case 8 -> {
-                return new Rider(50, 2, 1, 7, 5, 23, x, y, "8");
-            }
-            case 9 -> {
-                return new Rider(25, 3, 3, 2, 5, 25, x, y, "9");
-            }
-            case 10 -> {
-                return new Archer(999, 999, 999, 999, 999, 99, x, y,"❤");
-            }
-        }
-        return null;
-    }
-    public void moneyLimit(Person pers){
-        if (pers.getPrice() <= meWallet){
-            setMeWallet(meWallet - pers.getPrice());
-            System.out.println("Wallet = " + meWallet);
-            mePersons.add(pers);
-            enterField();
-        } else { System.out.println("LOL You don't have any money.");}
-    }
-    public void moneyLimitEnemy(Person pers){
-        if (pers.getPrice() <= enemyWallet){
-            setEnemyWallet(enemyWallet - pers.getPrice());
-            System.out.println("Wallet enemy = " + enemyWallet);
-            enemyPersons.add(pers);
-            enterField();
-        } else { System.out.println("LOL You don't have any money.");}
-    }
-    public void motionEnemy(){
-        System.out.print("Input number of the player:\n");
-        int count = 0;
-        for (count = 0; count < enemyPersons.size(); count++) {
-            System.out.println((count+1) + ".  <<" + enemyPersons.get(count).getNum() + ">>");
-        }
-        Random r = new Random();
-        int countPerson = r.nextInt(count);
-        System.out.println("Answer: " + (countPerson + 1));
-        System.out.println("Input coordinates where you want to go:");
-        int x = r.nextInt(15);
-        int y = r.nextInt(15);
-        System.out.print((x+1) + "\n" + (y+1) + "\n");
-        enemyPersons.get(countPerson).mechanismMotion(x, y);
-        enterField();
-    }
-    public void motion(){
-        System.out.print("Input number of the player:\n");
-        for (int count = 0; count < mePersons.size(); count++) {
-            System.out.println((count+1) + ".  <<" + mePersons.get(count).getNum() + ">>");
-        }
-        Scanner in = new Scanner(System.in);
-        int count = Integer.parseInt(in.nextLine()) - 1;
-        System.out.print("Input coordinates where you want to go:\n");
-        int x = Integer.parseInt(in.nextLine()) - 1;
-        int y = Integer.parseInt(in.nextLine()) - 1;
-        mePersons.get(count).mechanismMotion(x, y);
-        enterField();
-    }
-    public void attackEnemy(){
-        System.out.print("Input number of the player:\n");
-        int count;
-        for (count = 0; count < enemyPersons.size(); count++) {
-            System.out.println((count+1) + ".  <<" + enemyPersons.get(count).getNum() + ">>");
-        }
-        Random r = new Random();
-        int countPerson = r.nextInt(count);
-        System.out.println("Answer: " + (countPerson+1));
-        System.out.println("Input number of the enemy:");
-        int mi = 10000;
-        int countEnemy = 0;
-        for (count = 0; count < mePersons.size(); count++) {
-            System.out.println((count+1) + ".  <<" + mePersons.get(count).getNum() + ">>");
-            if (mi > mePersons.get(count).getDefence()){
-                mi = mePersons.get(count).getDefence();
-                countEnemy = count;
-            }
-        }
-        System.out.println("Answer: " + (countEnemy+1));
-        mePersons.get(countEnemy).mechanismAttack(enemyPersons.get(countPerson));
-        if (mePersons.get(countEnemy).getNum().equals("D"))
-            mePersons.remove(mePersons.get(countEnemy));
-        enterField();
 
-    }
-    public void attack(){
-        System.out.print("Input number of the player:\n");
-        for (int count = 0; count < mePersons.size(); count++) {
-            System.out.println((count+1) + ".  <<" + mePersons.get(count).getNum() + ">>");
-        }
-        Scanner in = new Scanner(System.in);
-        int countPerson = Integer.parseInt(in.nextLine()) - 1;
-        System.out.print("Input number of the enemy:\n");
-        for (int count = 0; count < enemyPersons.size(); count++) {
-            System.out.println((count+1) + ".  <<" + enemyPersons.get(count).getNum() + ">>");
-        }
-        int countEnemy = Integer.parseInt(in.nextLine()) - 1;
-        enemyPersons.get(countEnemy).mechanismAttack(mePersons.get(countPerson));
-        boolean isPersonDeleted = false;
-        if (enemyPersons.get(countEnemy).getNum().equals("D")) {
-            enemyPersons.remove(enemyPersons.get(countEnemy));
-            isPersonDeleted = true;
-        }
-        enterField();
-        if (!isPersonDeleted && enemyPersons.contains(enemyPersons.get(countEnemy))){
-            System.out.println("Health defender: " + enemyPersons.get(countEnemy).getHealth());
-            System.out.println("Defence defender: " + enemyPersons.get(countEnemy).getDefence());
-        }
-    }
-    public void nullingSteps(boolean who){
+    public void enterCatalog(boolean who){
+        System.out.println("Type Name         Health Attack AttackRange Defense Steps Price");
+        System.out.println("1\t" + " Swordsman    " + "50\t" + " 5\t\t" + "1\t\t\t" + "8\t\t" + "3    " + " 10");
+        System.out.println("2\t" + " Spearman     " + "35\t" + " 3\t\t" + "1\t\t\t" + "4\t\t" + "6    " + " 15");
+        System.out.println("3\t" + " Axeman       " + "45\t" + " 9\t\t" + "1\t\t\t" + "3\t\t" + "4    " + " 20");
+        System.out.println("4\t" + " Archerlev1   " + "30\t" + " 6\t\t" + "5\t\t\t" + "8\t\t" + "2    " + " 15");
+        System.out.println("5\t" + " Archerlev2   " + "25\t" + " 3\t\t" + "3\t\t\t" + "4\t\t" + "4    " + " 19");
+        System.out.println("6\t" + " Crossbowman  " + "40\t" + " 7\t\t" + "6\t\t\t" + "3\t\t" + "2    " + " 23");
+        System.out.println("7\t" + " Knight       " + "30\t" + " 5\t\t" + "1\t\t\t" + "3\t\t" + "6    " + " 20");
+        System.out.println("8\t" + " Cuirassier   " + "50\t" + " 2\t\t" + "1\t\t\t" + "7\t\t" + "5    " + " 23");
+        System.out.println("9\t" + " HorseArcher  " + "25\t" + " 3\t\t" + "3\t\t\t" + "2\t\t" + "5    " + " 25");
+        System.out.println("10  " + " God          " + "999\t" + "999\t\t" + "999\t\t\t" + "999\t\t" + "999\t " + " 99");
         if (who){
-            for (int w = 0; w < mePersons.size(); w++)
-                mePersons.get(w).setSteps(mePersons.get(w).getStartsteps());
+            myCity.enterAcademy();
+        } else { botCity.enterAcademy();}
+    }
+
+    public void nullingSteps(boolean who) {
+        if (who) {
+            for (int w = 0; w < MyPlayer.sizePlayer(); w++)
+                MyPlayer.getMy(w).setSteps(MyPlayer.getMy(w).getStartsteps());
         } else {
-            for (int w = 0; w < enemyPersons.size(); w++)
-                mePersons.get(w).setSteps(enemyPersons.get(w).getStartsteps());
+            for (int w = 0; w < Bot.sizePlayer(); w++) {
+                Bot.getBot(w).setSteps(Bot.getBot(w).getStartsteps());
+            }
         }
     }
 }

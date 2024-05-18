@@ -6,6 +6,7 @@ import Person.Person;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Bot extends Player{
     static ArrayList<Person> enemyPersons = new ArrayList<>();
@@ -44,7 +45,6 @@ public class Bot extends Player{
         int y = r.nextInt(10);
         System.out.print((x + 1) + "\n" + (y + 1) + "\n");
         System.out.println("Input Type: ");
-        BotCity botCity = BotCity.getInstance();
         //int t = r.nextInt(10 + botCity.getAllBuilding().get("Academy").size()) + 1;
         int t = 10;
         System.out.println(t);
@@ -91,20 +91,51 @@ public class Bot extends Player{
             MyPlayer.removeMy(MyPlayer.getMy(countEnemy));
 
     }
-    public static void save() throws Exception {
-        FileWriter nFile = new FileWriter("Bot.txt");
+    public static void save(String path) throws Exception {
+        FileWriter nFile = new FileWriter(path + "/Bot.txt");
+        int cnt = 0;
         for (int i = 0; i < sizePlayer(); i++) {
+            cnt++;
             nFile.write(enemyPersons.get(i).getNum() + "\t");
+            nFile.write(enemyPersons.get(i).getX() + "\t");
+            nFile.write(enemyPersons.get(i).getY() + "\t");
             nFile.write(enemyPersons.get(i).getHealth() + "\t");
             nFile.write(enemyPersons.get(i).getAttack() + "\t");
             nFile.write(enemyPersons.get(i).getRangeAttack() + "\t");
-            nFile.write(enemyPersons.get(i).getDefence() + "\t");
-            nFile.write(enemyPersons.get(i).getStartsteps() + "\t");
-            nFile.write(enemyPersons.get(i).getPrice() + "\t");
-            nFile.write(enemyPersons.get(i).getX() + "\t");
-            nFile.write(enemyPersons.get(i).getY() + "\t");
-            nFile.write("\n");
+            nFile.write(String.valueOf(enemyPersons.get(i).getDefence()));
+            if (cnt != sizePlayer())
+                nFile.write("\n");
         }
         nFile.close();
+    }
+    public static void load(Scanner botScan) {
+        while (botScan.hasNextLine()) {
+            String tt = botScan.next();
+            int t = 0;
+            if (tt.equals("❤"))
+                t = 10;
+            else
+                t = Integer.parseInt(tt);
+            int x = Integer.parseInt(botScan.next());
+            int y = Integer.parseInt(botScan.next());
+            Person pers = createPerson(x, y, t, false);
+            int health = Integer.parseInt(botScan.next());
+            if (health != pers.getHealth())
+                pers.setHealth(health);
+
+            int attack = Integer.parseInt(botScan.next());
+            if (attack != pers.getAttack())
+                pers.setAttack(attack);
+
+            int rangeAttack = Integer.parseInt(botScan.next());
+            if (rangeAttack != pers.getRangeAttack())
+                pers.setRangeAttack(rangeAttack);
+
+            int defence = Integer.parseInt(botScan.next());
+            if (defence != pers.getDefence())
+                pers.setDefence(defence);
+
+            enemyPersons.add(pers);
+        }
     }
 }

@@ -67,13 +67,16 @@ public class Academy extends Building{
     }
     @Override
     public void save(FileWriter nFile) throws IOException {
-        nFile.write("Academy" + "\t" +  getLevel() + "\t" + getStone() + "\t" + getLevel() + ";\n");
+        nFile.write("Academy" + "\t" + getLevel() + "\t");
         for (Person pers : persAcademy) {
             nFile.write(pers.getNum() + "\t" +
                     pers.getHealth() + "\t" + pers.getAttack() + "\t" +
                     pers.getRangeAttack() + "\t" + pers.getDefence() + "\t" +
-                    pers.getSteps() + "\t" + pers.getPrice() + ";\n");
+                    pers.getSteps() + "\t" + pers.getPrice());
         }
+    }
+    public void load(Scanner scan){
+
     }
     public void setLevel(){}
 }

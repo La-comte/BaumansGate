@@ -43,7 +43,7 @@ public class MyCity extends City{
         String build = in.nextLine();
         if (Player.resourceLimit(getAllBuilding().get(build))){
             if (getAllBuilding().get(build).getLevel()<3) {
-                getAllBuilding().get(build).setLevel();
+                getAllBuilding().get(build).setLevel(getAllBuilding().get(build).getLevel() + 1);
             }
             System.out.println("\tLevel now:\t" + getAllBuilding().get(build).getLevel());
             getAllBuilding().get(build).welcome(true);

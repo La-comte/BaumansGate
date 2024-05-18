@@ -26,12 +26,12 @@ public class Tavern extends Building {
         return steps;
     }
 
-    public void setFine(double up) {
-        fine += up;
+    public void setFine(double fine) {
+        this.fine = fine;
     }
 
-    public void setSteps(double up) {
-        steps += up;
+    public void setSteps(double steps) {
+        this.steps = steps;
     }
     @Override
     public void welcome(boolean who) {
@@ -46,13 +46,13 @@ public class Tavern extends Building {
                     case "steps" -> {
                         System.out.println("\t\tHow much to increase? (0-2)");
                         up = Double.parseDouble(in.nextLine());
-                        setSteps(up);
+                        setSteps(getSteps() + up);
 
                     }
                     case "fine" -> {
                         System.out.println("\t\tHow much to increase? (0-1)");
                         up = Double.parseDouble(in.nextLine());
-                        setFine(up);
+                        setFine(getFine() + up);
                     }
                 }
                 for(int i = 0; i < MyPlayer.sizePlayer(); i++){
@@ -85,8 +85,8 @@ public class Tavern extends Building {
     }
     @Override
     public void save(FileWriter nFile) throws IOException {
-        nFile.write("Tavern" + "\t" + getLevel() + "\t" + getStone() + "\t" + getLevel() + ";\n");
-        nFile.write( "steps\t" + steps + "\nfine\t" + fine + ";");
+        nFile.write("Tavern" + "\t" + getLevel() + "\t");
+        nFile.write( steps + "\t" + fine);
     }
     @Override
     public ArrayList<Person> getPersAcademy() {

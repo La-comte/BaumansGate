@@ -70,7 +70,7 @@ public class Market extends Building{
     }
     @Override
     public void save(FileWriter nFile) throws IOException {
-        nFile.write("Market" + "\t" + getLevel() + "\t" + getStone() + "\t" + getLevel() + ";");
+        nFile.write("Market" + "\t" + getLevel());
     }
     @Override
     public ArrayList<Person> getPersAcademy() {

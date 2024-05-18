@@ -1,5 +1,6 @@
+9
+Academy
 Arsenal
-Forge
 Workshop3
 Workshop4
 Healer
@@ -7,6 +8,4 @@ Workshop1
 Market
 Tavern
 Workshop2
-purchased
-Academy	1	2	1;
-N	20	200	20	200	20.0	20;
+Forge	1

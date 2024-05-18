@@ -1,3 +1,4 @@
+10
 Academy
 Arsenal
 Forge
@@ -8,4 +9,3 @@ Workshop1
 Market
 Tavern
 Workshop2
-purchased

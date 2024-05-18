@@ -29,7 +29,7 @@ public class Workshop extends Building{
     public void setLevel(){}
     @Override
     public void save(FileWriter nFile) throws IOException {
-        nFile.write("Workshop" + "\t" + getLevel() + "\t" + getStone() + "\t" + getLevel() + ";\n");
+        nFile.write("Workshop" + "\t" + getLevel());
     }
     @Override
     public ArrayList<Person> getPersAcademy() {

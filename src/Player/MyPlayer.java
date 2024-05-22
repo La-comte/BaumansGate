@@ -94,7 +94,7 @@ public class MyPlayer extends Player {
         int cnt = 0;
         for (int i = 0; i < sizePlayer(); i++) {
             cnt++;
-            nFile.write(myPersons.get(i).getNum() + "\t");
+            nFile.write(myPersons.get(i).getType() + "\t");
             nFile.write(myPersons.get(i).getX() + "\t");
             nFile.write(myPersons.get(i).getY() + "\t");
             nFile.write(myPersons.get(i).getHealth() + "\t");
@@ -109,12 +109,7 @@ public class MyPlayer extends Player {
 
     public static void load(Scanner botScan) {
         while (botScan.hasNextLine()) {
-            String tt = botScan.next();
-            int t = 0;
-            if (tt.equals("❤"))
-                t = 10;
-            else
-                t = Integer.parseInt(tt);
+            int t = Integer.parseInt(botScan.next());
             int x = Integer.parseInt(botScan.next());
             int y = Integer.parseInt(botScan.next());
             Person pers = createPerson(x, y, t, false);

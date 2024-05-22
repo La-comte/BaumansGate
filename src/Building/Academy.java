@@ -49,34 +49,16 @@ public class Academy extends Building{
             steps = r.nextInt(100);
             System.out.println(ConsoleColors.CYAN_BOLD + health + "\t" + attack + "\t" + rangeAttack + "\t" + defense + "\t" + steps + "\t" + (attack/10) + ConsoleColors.RESET);
         }
-        persAcademy.add(new Walking(health, attack, rangeAttack, defense, steps, (attack/10), 0, 0, "N"));
-    }
-    public void catalog(){
-        if (!persAcademy.isEmpty()) {
-            System.out.println("New type by Academy:\t");
-            for (int i = 0; i< persAcademy.size(); i++){
-                System.out.print((i+11) + "\t" + persAcademy.get(i).getNum() + "\t");
-                System.out.print(persAcademy.get(i).getHealth() + "\t");
-                System.out.print(persAcademy.get(i).getAttack() + "\t");
-                System.out.print(persAcademy.get(i).getRangeAttack() + "\t");
-                System.out.print(persAcademy.get(i).getDefence() + "\t");
-                System.out.print(persAcademy.get(i).getSteps() + "\t");
-                System.out.print(persAcademy.get(i).getPrice() + "\n");
-            }
-        }
+        persAcademy.add(new Walking(health, attack, rangeAttack, defense, steps, (attack/10), 0, 0, 11+ persAcademy.size()));
     }
     @Override
     public void save(FileWriter nFile) throws IOException {
         nFile.write("Academy" + "\t" + getLevel() + "\t");
         for (Person pers : persAcademy) {
-            nFile.write(pers.getNum() + "\t" +
-                    pers.getHealth() + "\t" + pers.getAttack() + "\t" +
+            nFile.write(pers.getType() + "\t" + pers.getHealth() + "\t" + pers.getAttack() + "\t" +
                     pers.getRangeAttack() + "\t" + pers.getDefence() + "\t" +
-                    pers.getSteps() + "\t" + pers.getPrice());
+                    pers.getSteps());
         }
-    }
-    public void load(Scanner scan){
-
     }
     public void setLevel(){}
 }

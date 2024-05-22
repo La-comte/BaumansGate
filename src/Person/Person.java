@@ -1,25 +1,33 @@
 package Person;
 import Building.Building;
 import Field.Field;
+import Player.Bot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class Person {
-    private int health, attack, rangeAttack, defence, price, x, y;
+    private int health, attack, rangeAttack, defence, price, x, y, type;
     private double steps, startsteps;
     private String num;
-    public Person(int health, int attack, int rangeAttack, int defence, double steps, int price, int x, int y, String num){
+    public Person(int health, int attack, int rangeAttack, int defence, double steps, int price, int x, int y, int type){
         this.health = health;
         this.attack = attack;
         this.rangeAttack = rangeAttack;
         this.defence = defence;
         this.steps = steps;
         startsteps = steps;
+        if (type > 10){
+            num = "♜";
+        } else if (type==10){
+            num = "❤";
+        } else {
+            num = String.valueOf(type);
+        }
         this.price = price;
         this.x = x;
         this.y = y;
-        this.num = num;
+        this.type = type;
     }
     private final HashMap<String, Double> fine = new HashMap<>();
 
@@ -39,6 +47,15 @@ public abstract class Person {
     public double getOneFine(String symbol){
         return getFine().get(symbol);
     }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public int getHealth(){
         return health;
     }

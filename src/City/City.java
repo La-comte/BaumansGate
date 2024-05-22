@@ -79,11 +79,8 @@ public abstract class City {
 
     public Person createPersonAcademy(int x, int y, int t) {
         Person pers = allBuilding.get("Academy").getPersAcademy().get(t);
-        if (pers.getSteps() >= pers.getAttack()) {
-            pers.setNum("♜");
-        } else {
-            pers.setNum("♚");
-        }
+        pers.setNum("♜");
+        pers.setType(11);
         pers.setX(x);
         pers.setY(y);
         return pers;
@@ -141,12 +138,13 @@ public abstract class City {
                 case "Workshop1", "Workshop2", "Workshop3", "Workshop4" -> allBuilding.put(name, new Workshop(3, 3));
                 case "Academy" -> {
                     allBuilding.put(name, new Academy(2, 3));
+                    int type = Integer.parseInt(city.next());
                     int health = Integer.parseInt(city.next());
                     int attack = Integer.parseInt(city.next());
                     int rangeAttack = Integer.parseInt(city.next());
                     int defence = Integer.parseInt(city.next());
                     double steps = Double.parseDouble(city.next());
-                    ((Academy) allBuilding.get(name)).getPersAcademy().add(new Walking(health, attack, rangeAttack, defence, steps, (attack / 10), 0, 0, "N"));
+                    ((Academy) allBuilding.get(name)).getPersAcademy().add(new Walking(health, attack, rangeAttack, defence, steps, (attack / 10), 0, 0, type));
                 }
                 case "Tavern" -> {
                     allBuilding.put(name, new Tavern(3, 2));

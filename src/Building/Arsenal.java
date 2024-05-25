@@ -32,7 +32,7 @@ public class Arsenal extends Building{
     }
     @Override
     public void save(FileWriter nFile) throws IOException {
-        nFile.write("Arsenal" + "\t" + getLevel() + "\t" + getStone() + "\t" + getLevel() + ";");
+        nFile.write("Arsenal" + "\t" + getLevel());
     }
 
     @Override

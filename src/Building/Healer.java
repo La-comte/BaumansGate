@@ -31,7 +31,7 @@ public class Healer extends Building{
     }
     @Override
     public void save(FileWriter nFile) throws IOException {
-        nFile.write("Healer" + "\t" + getLevel() + "\t" + getStone() + "\t" + getLevel() + ";");
+        nFile.write("Healer" + "\t" + getLevel());
     }
     @Override
     public ArrayList<Person> getPersAcademy() {

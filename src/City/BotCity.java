@@ -1,10 +1,12 @@
 package City;
 
 import Building.Academy;
+import Person.Person;
 import Player.Player;
 import Utils.ConsoleColors;
 
 import java.util.Random;
+import java.util.Scanner;
 import java.util.Set;
 
 public class BotCity extends City{
@@ -34,7 +36,7 @@ public class BotCity extends City{
         System.out.println("\t\t" + ConsoleColors.PURPLE + build + ConsoleColors.RESET);
         if (Player.resourceLimit(getAllBuilding().get(build))){
             if (getAllBuilding().get(build).getLevel()<3){
-                getAllBuilding().get(build).setLevel();
+                getAllBuilding().get(build).setLevel(getAllBuilding().get(build).getLevel() + 1);
             }
             System.out.println("\tLevel now:\t" + getAllBuilding().get(build).getLevel());
             getAllBuilding().get(build).welcome(false);

@@ -32,7 +32,7 @@ public class Forge extends Building{
     }
     @Override
     public void save(FileWriter nFile) throws IOException {
-        nFile.write("Forge" + "\t" + getLevel() + "\t" + getStone() + "\t" + getLevel() + ";");
+        nFile.write("Forge" + "\t" + getLevel());
     }
     @Override
     public ArrayList<Person> getPersAcademy() {
